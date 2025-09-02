@@ -6,13 +6,22 @@ import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { View } from 'react-native';
-import 'react-native-reanimated';
+
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 
 export default function RootLayout() {
 
   const backgroundColor = useThemeColor({}, 'background');
   const colorScheme = useColorScheme();
+
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: false,
+      }
+    }
+  });
  
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
@@ -27,14 +36,12 @@ export default function RootLayout() {
 
   return (
     <View style={{ backgroundColor: backgroundColor, flex: 1 }} >
+      <QueryClientProvider client={queryClient}>
         <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <Stack
-          screenOptions={{ headerShown: false}}
-        >
-
-        </Stack>
-        <StatusBar style="auto" />
-      </ThemeProvider>
+          <Stack screenOptions={{ headerShown: false}}></Stack>
+          <StatusBar style="auto" />
+        </ThemeProvider>
+      </QueryClientProvider>
     </View>
   );
 }

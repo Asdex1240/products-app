@@ -1,4 +1,4 @@
-import { productsApi } from "../api/productsApi";
+import { productsApi } from "@/core/api/productsApi";
 import { User } from "../interfaces/user";
 
 export interface AuthResponse {
@@ -38,7 +38,6 @@ export const authRegister = async(fullName: string, email: string, password: str
 
   try {
     const { data } = await productsApi.post<AuthResponse>('/auth/register', { fullName, email, password });
-    console.log(data)
     return returnUserToken( data );
   } catch (error) {
     console.log(error);

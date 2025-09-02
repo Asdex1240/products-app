@@ -27,7 +27,6 @@ const RegisterScreen = () => {
     
     if (fullName.length === 0 || email.length === 0  || password.length === 0) return;
     setIsposting(true);
-    console.log(form)
     const wasSuccessful = await register(fullName, email, password);
 
     setIsposting(false);
