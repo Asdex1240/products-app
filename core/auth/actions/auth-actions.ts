@@ -32,6 +32,21 @@ export const authLogin = async(email: string, password: string) => {
 
 }
 
+export const authRegister = async(fullName: string, email: string, password: string) => {
+  email = email.toLowerCase().trim();
+  fullName = fullName.trim();
+
+  try {
+    const { data } = await productsApi.post<AuthResponse>('/auth/register', { fullName, email, password });
+    console.log(data)
+    return returnUserToken( data );
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+
+}
+
 export const authCheckStatus = async() => {
   try {
     const { data } = await productsApi.get<AuthResponse>('/auth/check-status');
