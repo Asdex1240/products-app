@@ -1,32 +1,50 @@
+import LougoutIconButton from '@/presentation/auth/components/LougoutIconButton';
 import { useAuthStore } from '@/presentation/auth/store/useAuthStore';
-import { Redirect } from 'expo-router';
+import { useThemeColor } from '@/presentation/theme/hooks/useThemeColor';
+import { Redirect, Stack } from 'expo-router';
 import { useEffect } from 'react';
 import { ActivityIndicator, View } from 'react-native';
-const CheckAuthenticationLayout = () => {
 
+const CheckAuthenticationLayout = () => {
   const { status, checkStatus } = useAuthStore();
+  const backgroundColor = useThemeColor({}, 'background');
 
   useEffect(() => {
     checkStatus();
-  }, [])
-  
-  if( status === 'checking' ){
+  }, []);
+
+
+  if (status === 'checking') {
     return (
-      <View
-        style={{
-          flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center'
-        }}
-      >
-        <ActivityIndicator/>
+      <View style={{ flex:1, justifyContent:'center', alignItems:'center' }}>
+        <ActivityIndicator />
       </View>
-    )
+    );
   }
 
-  if( status === 'unauthenticated' ){
-    return <Redirect href="/auth/login"/>
+  if (status === 'unauthenticated'){
+    // Guardar la ruta del usuario
+    return <Redirect href={'/auth/login'} />
   }
-}
 
-export default CheckAuthenticationLayout
+  return (
+    <Stack
+      screenOptions={{
+        headerShadowVisible: false,
+        headerStyle: { backgroundColor },
+        contentStyle: { backgroundColor}
+      }}
+    >
+      <Stack.Screen
+        name='(home)/index'
+        options={
+          { 
+            title: 'Productos',
+            headerLeft: () => <LougoutIconButton></LougoutIconButton>,
+          }}
+      />
+    </Stack>
+  )
+};
+
+export default CheckAuthenticationLayout;
