@@ -1,5 +1,7 @@
 import ProductImages from '@/presentation/products/components/ProductImages';
+import ThemeButtonGroup from '@/presentation/products/components/ThemeButtonGroup';
 import { useProduct } from '@/presentation/products/hooks/useProduct';
+import ThemedButton from '@/presentation/theme/components/ThemedButton';
 import ThemedTextInput from '@/presentation/theme/components/ThemedTextInput';
 import { ThemedView } from '@/presentation/theme/components/ThemedView';
 import { Ionicons } from '@expo/vector-icons';
@@ -74,6 +76,31 @@ const ProductScreen = () => {
           <ThemedTextInput placeholder='Inventario' style={{ flex: 1 }} />
 
         </ThemedView>
+
+        <ThemedView style={{
+          marginHorizontal: 10,
+        }}>
+          <ThemeButtonGroup
+            options={ [ 'XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL' ] }
+            selectedOptions={ product.sizes }
+            onSelect={ ( size ) => console.log(size) }
+          />
+
+          <ThemeButtonGroup
+            options={ [ 'kids', 'men', 'women', 'unisex' ] }
+            selectedOptions={ [product.gender] }
+            onSelect={ ( size ) => console.log(size) }
+          />
+        </ThemedView>
+
+        <View style={{ marginHorizontal: 10, marginVertical: 20 }}>
+          <ThemedButton
+            icon='save-outline'
+            onPress={ () => console.log('save') }
+          >
+            Guardar
+          </ThemedButton>
+        </View>
       </ScrollView>
     </KeyboardAvoidingView>
   )
