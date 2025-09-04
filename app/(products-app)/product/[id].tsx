@@ -10,7 +10,7 @@ import { ThemedView } from '@/presentation/theme/components/ThemedView';
 import { Redirect, router, useLocalSearchParams, useNavigation } from 'expo-router';
 import { Formik } from 'formik';
 import React, { useEffect } from 'react';
-import { ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
+import { ActivityIndicator, KeyboardAvoidingView, Platform, RefreshControl, ScrollView, View } from 'react-native';
 
 const ProductScreen = () => {
 
@@ -64,14 +64,26 @@ const ProductScreen = () => {
   return (
     <Formik
       initialValues={product}
-      onSubmit={ ( productLike ) => productMutation.mutate( productLike ) }
+      onSubmit={ ( productLike ) => productMutation.mutate({
+        ...productLike,
+        images: [ ...product.images, ...selectedImages ]
+      }) }
     >
       {
         ({ values, handleSubmit, handleChange, setFieldValue }) => (
           <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : undefined}
           >
-            <ScrollView>
+            <ScrollView
+              refreshControl={
+                <RefreshControl 
+                  refreshing={ productQuery.isFetching  }
+                  onRefresh={ async() => {
+                    await productQuery.refetch();
+                  }}
+                />
+              }
+            >
               <ProductImages images={[...values.images, ...selectedImages]} />
                 <ThemedView style={{ marginHorizontal: 10, marginTop: 20 }}>
                   <ThemedTextInput 
